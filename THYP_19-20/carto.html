@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   
+
+    <title>Cartographie</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/starter-template/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="js/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="js/starter-template.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>    
+    <script src="js/Leaflet.CountrySelect.js"></script>
+    <script src="js/leaflet.ajax.min.js"></script>
+    <script src="js/countries.geo.json"></script>
+    <script src='//d3js.org/d3.v5.min.js'></script>
+	<script type='text/javascript' src='js/paysvisite.js'></script>
+
+
+    <style>
+        #mapid { 
+            height: 400px; 
+            width: 800px;
+        }        
+    </style>
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+      <a class="navbar-brand" href="#">Cartographie</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+    </nav>
+
+    <main role="main" class="container">
+
+      
+	  
+	  <div class="starter-template">
+        <h1>Les villes visitées par : </h1>
+		<h3>BOULILA Noussaiba</h3>
+		 <div id="mapid"></div>
+	  
+	 </main><!-- /.container -->
+	   <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script>
+        var map = L.map('mapid').setView([0, 0], 1);   
+        
+        var cartodbAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attribution">CARTO</a>';
+
+        var positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+            attribution: cartodbAttribution
+        }).addTo(map);
+
+        var select = L.countrySelect({exclude:"French Southern and Antarctic Lands"});
+        //var pays = 
+        select.addTo(map);
+
+        select.on('change', function(e){
+            if (e.feature === undefined){ //Do nothing on title
+                return;
+            }
+            var country = L.geoJson(e.feature);
+            if (this.previousCountry != null){
+                map.removeLayer(this.previousCountry);
+            }
+            this.previousCountry = country;
+
+            map.addLayer(country);
+            map.fitBounds(country.getBounds());
+            
+        });
+
+        //charge les limites des pays
+        //var geojsonLayer = new L.GeoJSON.AJAX("js/countries.geo.json").addTo(map);
+
+        //défini l'échelle de couleur
+        var colorScale = d3.scaleSequential()
+            .domain([0, 100])
+            .interpolator(d3['interpolatePlasma']); 
+
+
+//merci a https://github.com/asmaloney/Leaflet_Example
+
+
+	 var paysVisites = {
+            "Algeria": 5,
+            "France": 4, 
+            "Spain": 2, 
+            "Germany": 2,  
+            "England" : 2, 
+            };
+	//.bindPopup( 'Nombre de visite ' +  listePaysVisites[i].name + '</a>' )		
+for ( var i=0; i < listePaysVisites.length; ++i )
+{ 
+var nompays=listePaysVisites[i].name;
+     L.marker( [listePaysVisites[i].lat, listePaysVisites[i].lng] )
+	  .bindPopup( '<center>'+'<a href="' + listePaysVisites[i].url + '" target="_blank">' + listePaysVisites[i].name + '</a>'+'<br/>'+
+	  'Nombre de visite : ' +  paysVisites[nompays] + '  fois'+'</br>'+'</centre>')
+      .addTo( map );
+  
+}
+//définie le style du pays
+        //merci à https://leafletjs.com/examples/choropleth/  
+
+		
+        var nbAlea = d3.randomUniform(0, 100);
+      
+	  function colorPaysVisites(name)
+		{
+		   if(paysVisites[name] > 0) return colorScale(paysVisites[name]);
+		   
+		   return true;
+        }
+	
+		
+
+        function style(feature) {
+            return {
+                //fillColor: colorScale(feature.properties.density),
+                fillColor: colorPaysVisites(feature.properties.name),
+                weight: 2,
+                opacity: 1,
+                color: 'white',
+                dashArray: '3',
+                fillOpacity: 0.7
+            };
+        }
+		
+		
+		
+        //charge les limites des pays avec leur style
+        L.geoJson(statesData, {style: style}).addTo(map);
+		
+
+
+
+    </script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>

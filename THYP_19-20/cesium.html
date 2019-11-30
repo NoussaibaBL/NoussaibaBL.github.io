@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+		<title>Cesium</title>
+		<script type="text/javascript" src="js/Cesium-1.63/Apps/Sandcastle/Sandcastle-header.js"></script>
+		<script type="text/javascript" src="js/Cesium-1.63/Build/CesiumUnminified/Cesium.js" ></script>
+	</head>
+
+	<style>
+		@import url(js/Cesium-1.63/Apps/Sandcastle/templates/bucket.css);
+	</style>
+	
+	<div id="cesiumContainer" class="fullSize"></div>
+	<div id="loadingOverlay"><h1>Loading...</h1></div>
+	<div id="toolbar"></div>
+	
+
+	<script id="cesium_sandcastle_script">
+	
+		Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIyYTEyNzdmZS02ODM2LTQ4MGMtOTk3MS00ZDUwMDkzODNiNjMiLCJpZCI6MTc3NzcsInNjb3BlcyI6WyJhc3IiLCJnYyJdLCJpYXQiOjE1NzI4MTcyNjd9.5qOZVp19Hs6x6QgLmWz4k2hL09yXzVW2ALlSRP2b6wQ'		
+		var viewer = new Cesium.Viewer('cesiumContainer');
+		
+
+		viewer.dataSources.add(Cesium.GeoJsonDataSource.load('js/Algeria.topojson', {
+			stroke: Cesium.Color.YELLOW,
+			fill: Cesium.Color.RED.withAlpha(0.5),
+			strokeWidth: 3
+		}));
+		
+		viewer.dataSources.add(Cesium.GeoJsonDataSource.load('js/France.topojson', {
+        stroke: Cesium.Color.YELLOW,
+        fill: Cesium.Color.BROWN.withAlpha(0.5),
+        strokeWidth: 3
+        }));
+		viewer.dataSources.add(Cesium.GeoJsonDataSource.load('js/Spain.topojson', {
+			stroke: Cesium.Color.YELLOW,
+			fill: Cesium.Color.GREEN.withAlpha(0.5),
+			strokeWidth: 3
+		}));
+		
+		viewer.dataSources.add(Cesium.GeoJsonDataSource.load('js/Germany.topojson', {
+        stroke: Cesium.Color.YELLOW,
+        fill: Cesium.Color.YELLOW.withAlpha(0.5),
+        strokeWidth: 3
+        }));
+        viewer.dataSources.add(Cesium.GeoJsonDataSource.load('js/England.topojson', {
+        stroke: Cesium.Color.YELLOW,
+        fill: Cesium.Color.PURPLE.withAlpha(0.5),
+        strokeWidth: 3
+        }));
+		
+		
+</script>
+</body>
+</html>
